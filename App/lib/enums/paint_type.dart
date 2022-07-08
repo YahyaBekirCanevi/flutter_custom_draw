@@ -13,9 +13,9 @@ extension PaintTypeExtension on PaintType {
       case PaintType.brush:
         return FontAwesomeIcons.brush;
       case PaintType.eraser:
-        return FontAwesomeIcons.fill;
-      case PaintType.filler:
         return FontAwesomeIcons.eraser;
+      case PaintType.filler:
+        return FontAwesomeIcons.fill;
       default:
         return FontAwesomeIcons.plus;
     }

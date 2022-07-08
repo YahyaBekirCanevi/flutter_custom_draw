@@ -1,4 +1,4 @@
-import 'package:draw/pages/DrawngPage/drawing_page.dart';
+import 'package:draw/pages/DrawingPage/drawing_page.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
