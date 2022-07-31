@@ -27,15 +27,15 @@ class Painter extends HookWidget {
   @override
   build(BuildContext context) {
     var list = useState(<DrawingPoints?>[]);
-    var paintBrushBloc =
-        useMemoized(() => BlocProvider.of<PaintBrushBloc>(context));
-    var paintPointBloc =
-        useMemoized(() => BlocProvider.of<PaintPointBloc>(context));
+    var paintPointBloc = BlocProvider.of<PaintPointBloc>(context);
     return BlocBuilder<PaintPointBloc, PaintPointState>(
       bloc: paintPointBloc,
+      buildWhen: (previous, current) =>
+          previous.getList.length != current.getList.length,
       builder: (context, paintPointState) {
+        print(paintPointState.getList.length);
         return BlocBuilder<PaintBrushBloc, PaintBrush>(
-          bloc: paintBrushBloc,
+          bloc: BlocProvider.of<PaintBrushBloc>(context),
           builder: (context, paintBrushState) {
             return GestureDetector(
               onPanStart: (details) {

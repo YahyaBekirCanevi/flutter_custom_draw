@@ -16,7 +16,6 @@ class BottomBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var icon = useState(FontAwesomeIcons.brush);
     var isOpen = useState(false);
     var ticker = useSingleTickerProvider(keys: [1, 0]);
     var anim = useAnimationController(duration: _duration, vsync: ticker);
@@ -43,45 +42,32 @@ class BottomBar extends HookWidget {
               height: isOpen.value ? 3 * 60 : 0,
               child: BlocBuilder<PaintPointBloc, PaintPointState>(
                 bloc: BlocProvider.of<PaintPointBloc>(context),
-                buildWhen: (previous, current) => true,
                 builder: (context, state) => Wrap(
                   children: [
-                    FontAwesomeIcons.brush,
-                    FontAwesomeIcons.arrowRotateLeft,
-                    FontAwesomeIcons.arrowRotateRight,
-                  ] //PaintType.values
-                      .map((e) => AnimatedScale(
-                            curve: Curves.bounceOut,
-                            duration: _duration,
-                            scale: isOpen.value ? 1 : 0,
-                            child: InkWell(
-                              onTap: () {
-                                icon.value = e;
-                                print(icon.value.toString());
-                                if (icon.value ==
-                                    FontAwesomeIcons.arrowRotateLeft) {
-                                  state.takeBack();
-                                } else if (icon.value ==
-                                    FontAwesomeIcons.arrowRotateRight) {
-                                  state.putBack();
-                                }
-                                BlocProvider.of<PaintPointBloc>(context)
-                                    .add(PaintPointEvent(state));
-                                //onPaintChange(e);
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                maxRadius: 30,
-                                minRadius: 0,
-                                child: FaIcon(
-                                  e, //.getIcon(),
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ))
-                      .toList(),
+                    buildMenuItem(
+                      FontAwesomeIcons.brush,
+                      isOpen,
+                      () {},
+                    ),
+                    buildMenuItem(
+                      FontAwesomeIcons.arrowRotateLeft,
+                      isOpen,
+                      () {
+                        state.takeBack();
+                        BlocProvider.of<PaintPointBloc>(context)
+                            .add(PaintPointEvent(state));
+                      },
+                    ),
+                    buildMenuItem(
+                      FontAwesomeIcons.arrowRotateRight,
+                      isOpen,
+                      () {
+                        state.putBack();
+                        BlocProvider.of<PaintPointBloc>(context)
+                            .add(PaintPointEvent(state));
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -111,4 +97,23 @@ class BottomBar extends HookWidget {
       ),
     );
   }
+
+  buildMenuItem(icon, isOpen, Function() onTap) => AnimatedScale(
+        curve: Curves.bounceOut,
+        duration: _duration,
+        scale: isOpen.value ? 1 : 0,
+        child: InkWell(
+          onTap: () => onTap(),
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            maxRadius: 30,
+            minRadius: 0,
+            child: FaIcon(
+              icon, //.getIcon(),
+              size: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
 }

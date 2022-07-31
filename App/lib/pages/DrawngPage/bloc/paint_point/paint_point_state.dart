@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 part of 'paint_point_bloc.dart';
 
 class PaintPointState extends Equatable {
@@ -24,7 +26,6 @@ class PaintPointState extends Equatable {
 
   takeBack() {
     if (list.isEmpty) return;
-    print("takeBack");
     if (reverted.isEmpty) reverted = [];
     reverted.add(list.last);
     list.removeLast();
@@ -32,8 +33,7 @@ class PaintPointState extends Equatable {
 
   putBack() {
     if (reverted.isEmpty) return;
-    print("putBack");
-    if (list.isEmpty) reverted = [];
+    if (list.isEmpty) list = [];
     list.add(reverted.last);
     reverted.removeLast();
   }
